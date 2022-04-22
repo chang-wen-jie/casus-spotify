@@ -3,10 +3,12 @@ class Program
 {
     static void Main(String[] args)
     {
+        //INTRODUCTIE
         Console.Write("Welkom, leuk dat je voor Spotify hebt gekozen!\nHoe kunnen wij jou noemen?: ");
         Person person = new Person();
         person.initializePersons();
         string username = Console.ReadLine();
+
         if (!string.IsNullOrWhiteSpace(username))
         {
             person.setName(username);
@@ -15,13 +17,14 @@ class Program
         Console.Write("\nHoi " + person.name + "!\nLaten wij beginnen, hoe heet jouw afspeellijst?: ");
         Playlist playlist = new Playlist();
         string playlistName = Console.ReadLine();
+
         if (!string.IsNullOrWhiteSpace(playlistName))
         {
             playlist.setPlaylistName(playlistName);
         }
+        
         Console.WriteLine("\n" + playlist.playlistName + " is aangemaakt.\n");
         Task.Delay(1000).Wait();
-
         Console.WriteLine("--------------------------------------------------\n" + @"
 ████████████████████████████████████████
 █─▄▄▄▄█▄─▄▄─█─▄▄─█─▄─▄─█▄─▄█▄─▄▄─█▄─█─▄█
@@ -29,6 +32,8 @@ class Program
 ▀▄▄▄▄▄▀▄▄▄▀▀▀▄▄▄▄▀▀▄▄▄▀▀▄▄▄▀▄▄▄▀▀▀▀▄▄▄▀▀
 " + "\n--------------------------------------------------");
         Console.WriteLine("\nHoi " + person.name + "! Wat wil je doen?");
+
+        // BEGIN HOOFDMENU
         while (true)
         {
             string userAction = "";
@@ -44,11 +49,16 @@ class Program
             {
                 switch (userActionChoice)
                 {
+
+                    // PROGRAMMA AFSLUITEN
                     default:
                         Console.WriteLine("\n--------------------------------------------------\nTot ziens!\n--------------------------------------------------");
                         return;
+
+                    // AFSPEELLIJST ACTIES
                     case "a":
                         Console.WriteLine("\n--------------------------------------------------\n\n" + playlist.playlistName + " (" + playlist.songs.Count + " nummers):\n");
+
                         if (playlist.songs.Count == 0)
                         {
                             Console.WriteLine("Het is nogal leeg hier, je wordt teruggestuurd naar de hoofdmenu...\n\n--------------------------------------------------");
@@ -58,11 +68,13 @@ class Program
                                 Console.WriteLine(i + ". " + playlist.getSongs(i));
                             Console.Write("\na: Afspeellijst afspelen\nb: Nummer verwijderen\nc: Terug naar hoofdmenu\n\nIk wil: ");
                             string playlistAction = Console.ReadLine().ToLower();
+
                             if (playlistAction == "a")
                             {
                                 Console.Write("Op willekeurige volgorde afspelen? (j/n): ");
                                 string shufflePlay = Console.ReadLine().ToLower();
                                 Console.WriteLine();
+
                                 if (shufflePlay == "j")
                                 {
                                     for (int i = 0; i < playlist.songs.Count; i++)
@@ -86,6 +98,7 @@ class Program
                                 Console.Write("Verwijder nummer: ");
                                 string removeSong = Console.ReadLine();
                                 bool isParsable = int.TryParse(removeSong, out int n);
+
                                 if (isParsable)
                                 {
                                     List<int> availableSongs = new List<int>();
@@ -107,17 +120,22 @@ class Program
                             }
                         }
                         break;
+
+                    // NUMMERS ACTIES
                     case "b":
                         Console.WriteLine("\n--------------------------------------------------\n\nBeschikbare nummers:\n");
                         Song song = new Song();
                         song.initializeSongs();
                         Album album = new Album();
                         album.initializeAlbum();
+                        
                         for (int i = 0; i < song.song.Count; i++)
                             Console.WriteLine(i + song.getSong(i));
+                        
                         Console.WriteLine("\nNieuwste album: " + album.Name);
                         Console.Write("\na: Nummer bekijken\nb: Album bekijken\nc: Terug naar hoofdmenu\n\nIk wil: ");
                         userAction = Console.ReadLine().ToLower();
+
                         if (userAction == "a")
                         {
                             Console.Write("Bekijk nummer: ");
@@ -206,11 +224,14 @@ class Program
                         } else if (userAction == "b")
                         {
                             Console.WriteLine("\n--------------------------------------------------\n\nNummers (" + album.songs.Count + "):\n");
+
                             for (int i = 0; i < album.songs.Count; i++)
                                 Console.WriteLine(i + ". " + album.getSong(i));
+                            
                             Console.Write("\na: Album afspelen\nb: Album toevoegen aan " + playlist.playlistName + "\nc: Terug naar hoofdmenu\n\nIk wil: ");
                             userAction = Console.ReadLine().ToLower();
                             Console.WriteLine();
+
                             if (userAction == "a")
                             {
                                 for (int i = 0; i < album.songs.Count; i++)
@@ -232,12 +253,17 @@ class Program
                             Console.WriteLine("\n--------------------------------------------------");
                         }
                         break;
+
+                    // GEBRUIKERS ACTIE
                     case "c":
                         Console.WriteLine("\n--------------------------------------------------\n\nSpotify gebruikers:\n");
+
                         for (int i = 0; i < person.users.Count; i++)
                             Console.WriteLine(i + ". " + person.getUsers(i));
+                        
                         Console.Write("\na: Gebruiker bekijken\nb: Terug naar hoofdmenu\n\nIk wil: ");
                         userAction = Console.ReadLine().ToLower();
+
                         if (userAction == "a")
                         {
                             string userSelection = "";
@@ -247,11 +273,13 @@ class Program
                             Console.WriteLine("\n--------------------------------------------------");
                             List<string> userSelectionOptions = new List<string>(new string[] { "0", "1", "2", "3", "4" });
                             int userSelectionOptionExists = userSelectionOptions.IndexOf(userSelection);
+                            
                             if (userSelectionOptionExists != -1)
                             {
                                 Console.WriteLine("\n" + person.getUserInfo(Int32.Parse(userSelection)));
                                 Console.Write("\na: Toevoegen als vriend\nb: Afspeellijst bekijken\n\nIk wil: ");
                                 userOption = Console.ReadLine().ToLower();
+                                
                                 if (userOption == "a")
                                 {
                                     Console.WriteLine("\n--------------------------------------------------\n");
@@ -263,6 +291,7 @@ class Program
                                     Console.WriteLine(person.getUserPlaylist(Int32.Parse(userSelection)));
                                     Console.Write("a: Nummer afspelen\nb: Nummers toevoegen aan " + person.playlistName + "\n\nIk wil: ");
                                     string userSongAction = Console.ReadLine();
+
                                     if (userSongAction == "a")
                                     {
                                         Console.WriteLine("\n--------------------------------------------------\n");
@@ -311,6 +340,8 @@ class Program
                         }
                         Console.WriteLine("\n--------------------------------------------------");
                         break;
+
+                    // VRIENDENLIJST OPHALEN
                     case "d":
                         Console.WriteLine("\n--------------------------------------------------\n\n" + person.name + " (" + person.friends.Count + " vrienden):\n");
                         if (person.friends.Count == 0)
